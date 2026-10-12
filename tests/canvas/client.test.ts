@@ -55,4 +55,8 @@ describe("CanvasClient", () => {
     const c = new CanvasClient(fakeFetch(500, "boom").fn, cookie("tok"));
     await expect(c.get("/x")).rejects.toThrow(/500/);
   });
+  it("throws CanvasHttpError carrying the status on 404", async () => {
+    const c = new CanvasClient(fakeFetch(404, "nf").fn, cookie("tok"));
+    await expect(c.get("/x")).rejects.toMatchObject({ name: "CanvasHttpError", status: 404 });
+  });
 });

@@ -1,4 +1,4 @@
-import { loadState, saveState } from "../storage";
+import { loadState, saveMappings } from "../storage";
 import type { State } from "../types";
 
 const $ = (id: string) => document.getElementById(id) as HTMLElement;
@@ -49,15 +49,13 @@ function render(state: State): void {
 }
 
 async function save(): Promise<void> {
-  const state = await loadState();
   const mappings: State["mappings"] = {};
   for (const sel of Array.from(document.querySelectorAll<HTMLSelectElement>("select[data-gs]"))) {
     const gsId = sel.dataset.gs!;
     if (sel.value === "auto") continue;
     mappings[gsId] = sel.value === "none" ? null : Number(sel.value);
   }
-  state.mappings = mappings;
-  await saveState(state);
+  await saveMappings(mappings); // own storage key: a sync running right now cannot overwrite it
   $("saved").textContent = "Saved. Takes effect on the next sync.";
 }
 

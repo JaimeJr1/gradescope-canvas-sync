@@ -5,6 +5,13 @@ export const CANVAS_BASE = "https://gatech.instructure.com";
 export type FetchFn = typeof fetch;
 export type CookieReader = (url: string, name: string) => Promise<string | null>;
 
+export class CanvasHttpError extends Error {
+  constructor(public readonly status: number, detail: string) {
+    super(detail);
+    this.name = "CanvasHttpError";
+  }
+}
+
 export function parseCanvasJson<T>(text: string): T {
   return JSON.parse(text.replace(/^while\(1\);/, "")) as T;
 }
@@ -46,7 +53,7 @@ export class CanvasClient {
       body: body === undefined ? undefined : JSON.stringify(body),
     });
     if (res.status === 401 || res.url.includes("/login")) throw new SessionExpired("canvas");
-    if (!res.ok) throw new Error(`Canvas ${method} ${path} -> ${res.status}`);
+    if (!res.ok) throw new CanvasHttpError(res.status, `Canvas ${method} ${path} -> ${res.status}`);
     const text = await res.text();
     return text ? parseCanvasJson<T>(text) : (undefined as T);
   }

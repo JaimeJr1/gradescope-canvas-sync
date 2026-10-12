@@ -9,11 +9,17 @@ describe("normalizeCode", () => {
     ["CS-3210-A", "CS3210"],
     ["202608-CS-3210-A", "CS3210"],
     ["MATH 2550 Fall 2026", "MATH2550"],
+    ["Fall 2026 CS 3210", "CS3210"],
   ])("%s -> %s", (input, expected) => {
     expect(normalizeCode(input)).toBe(expected);
   });
   it("returns null when no dept+number is present", () => {
     expect(normalizeCode("Design of Operating Systems")).toBeNull();
+  });
+  it("does not treat a term like 'Fall 2026' as a course code", () => {
+    expect(normalizeCode("Fall 2026 Orientation")).toBeNull();
+    expect(normalizeCode("Seminar Fall 2026")).toBeNull();
+    expect(normalizeCode("Spring 2026")).toBeNull();
   });
 });
 

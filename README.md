@@ -12,7 +12,14 @@ Planner, Calendar and the BetterCanvas due card.
     npm start          # temporary Firefox profile with the extension loaded
 
 Sign in to Gradescope and Canvas in that window, click the toolbar icon,
-press "Sync now". Fix course matches under "Course mapping…".
+press "Sync now" (the first press also asks Firefox to allow site access to
+both sites; Firefox 115–126 do not grant it at install). Fix course matches
+under "Course mapping…".
+
+Notes carry the Gradescope assignment URL in their details, so after a
+reinstall or a fresh profile the extension adopts its existing notes instead
+of creating duplicates. Checking a note off or deleting it in Canvas is
+respected: a deleted note is never recreated.
 
 ## Install permanently
 

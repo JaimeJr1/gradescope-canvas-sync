@@ -29,6 +29,9 @@ describe("parseAccount", () => {
   it("throws LayoutChanged when #account-show is missing", () => {
     expect(() => parseAccount("<html><body><p>hi</p></body></html>")).toThrow(/layout changed/);
   });
+  it("throws LayoutChanged when #account-show has no course boxes", () => {
+    expect(() => parseAccount('<div id="account-show"><p>x</p></div>')).toThrow(/layout changed/);
+  });
 });
 
 describe("parseCourse", () => {

@@ -22,10 +22,9 @@ export function parseAccount(html: string): GsCourse[] {
   const root = doc(html).querySelector("#account-show");
   if (!root) throw new LayoutChanged("account page: #account-show missing");
   const termEl = root.querySelector(".courseList--term");
-  if (!termEl) return [];
+  const block = termEl?.nextElementSibling;
+  if (!termEl || !block) throw new LayoutChanged("account page: no .courseList--term block");
   const term = termEl.textContent?.trim() ?? "";
-  const block = termEl.nextElementSibling;
-  if (!block) return [];
   const out: GsCourse[] = [];
   for (const a of Array.from(block.querySelectorAll<HTMLAnchorElement>("a.courseBox"))) {
     const href = a.getAttribute("href") ?? "";
@@ -38,6 +37,7 @@ export function parseAccount(html: string): GsCourse[] {
       term,
     });
   }
+  if (out.length === 0) throw new LayoutChanged("account page: no a.courseBox under the first term");
   return out;
 }
 

@@ -4,6 +4,7 @@ import { CanvasClient } from "../canvas/client";
 import { CanvasApi } from "../canvas/api";
 import { loadState, saveState } from "../storage";
 import { SessionExpired } from "../errors";
+import { HOST_ACCESS_MESSAGE, hasHostAccess } from "../permissions";
 import type { State, SyncCounts } from "../types";
 
 const ALARM = "sync";
@@ -22,6 +23,7 @@ export async function syncWithBadge(): Promise<SyncResponse> {
   if (running) return { skipped: true };
   running = true;
   try {
+    if (!(await hasHostAccess())) throw new Error(HOST_ACCESS_MESSAGE);
     const counts = await runSync({
       gs: new GradescopeClient(),
       canvas: new CanvasApi(new CanvasClient()),
