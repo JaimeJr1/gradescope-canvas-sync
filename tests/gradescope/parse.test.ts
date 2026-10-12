@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { parseAccount, parseCourse, parseGsDatetime } from "../../src/gradescope/parse";
 
@@ -57,5 +57,27 @@ describe("parseCourse", () => {
   });
   it("throws LayoutChanged when there are no rows", () => {
     expect(() => parseCourse("<html><body></body></html>", "1")).toThrow(/layout changed/);
+  });
+});
+
+const realAccount = join(__dirname, "..", "fixtures", "real-account.html");
+const realCourse = join(__dirname, "..", "fixtures", "real-course.html");
+
+describe.skipIf(!existsSync(realAccount))("parseAccount on a real page", () => {
+  it("finds at least one numeric course id with a short name", () => {
+    const courses = parseAccount(fx("real-account.html"));
+    expect(courses.length).toBeGreaterThan(0);
+    for (const c of courses) {
+      expect(c.id).toMatch(/^\d+$/);
+      expect(c.shortName).not.toBe("");
+    }
+  });
+});
+
+describe.skipIf(!existsSync(realCourse))("parseCourse on a real page", () => {
+  it("returns assignments with ISO due dates", () => {
+    const rows = parseCourse(fx("real-course.html"), "0");
+    expect(rows.length).toBeGreaterThan(0);
+    for (const r of rows) expect(r.dueAt).toMatch(/^\d{4}-\d{2}-\d{2}T.*Z$/);
   });
 });
