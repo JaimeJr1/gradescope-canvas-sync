@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Gradescope to Canvas Sync",
+  "version": "0.1.0",
+  "description": "Mirrors Gradescope assignments into Canvas Planner To-Do notes.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "gradescope-canvas-sync@jaimejr1",
+      "strict_min_version": "115.0",
+      "data_collection_permissions": { "required": ["none"] }
+    }
+  },
+  "permissions": ["alarms", "storage", "cookies"],
+  "host_permissions": ["https://www.gradescope.com/*", "https://gatech.instructure.com/*"],
+  "background": { "scripts": ["background.js"] },
+  "action": { "default_title": "Gradescope to Canvas Sync", "default_popup": "popup.html" },
+  "options_ui": { "page": "options.html", "open_in_tab": true }
+}

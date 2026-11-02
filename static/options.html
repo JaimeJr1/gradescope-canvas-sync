@@ -1,0 +1,20 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+  body { font: 14px system-ui, sans-serif; max-width: 720px; margin: 24px auto; padding: 0 16px; }
+  table { border-collapse: collapse; width: 100%; }
+  td, th { text-align: left; padding: 6px 8px; border-bottom: 1px solid #ddd; }
+  .warn { color: #8a5a00; }
+  .muted { color: #666; }
+</style></head>
+<body>
+  <h1>Gradescope to Canvas: course mapping</h1>
+  <p class="muted">Run a sync once so the course lists are filled. "Auto" uses the course-code match; pick a course to override, or "(none)" to create notes with no course.</p>
+  <div id="warnings" class="warn"></div>
+  <table>
+    <thead><tr><th>Gradescope course</th><th>Canvas course</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <p><button id="save">Save</button> <span id="saved" class="muted"></span></p>
+  <script src="options.js"></script>
+</body></html>
